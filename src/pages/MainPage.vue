@@ -1,5 +1,5 @@
 <template>
-  <div>888</div>
+  <div>Жаным я тебя люблю</div>
 </template>
 
 <script>
