@@ -4,7 +4,7 @@
   view="hHh LpR lff"
   container 
   style="height: 70px"
-  class="header rounded-borders"
+  class="fixed header rounded-borders"
 
   >
     <q-header class="bg-black q-mt-sm q-pl-md header">
@@ -60,7 +60,7 @@
             <div class="text-h5" style="color: white">
               Movie Select
           <q-badge outline align="middle" color="teal">
-            v1.1.0
+            v1.1.1
         </q-badge>
     </div>
         </q-toolbar>
@@ -93,6 +93,9 @@ export default {
 </script>
 
 <style>
-
+.header{
+  background-color: black;
+  z-index: 1;
+}
 
 </style>
