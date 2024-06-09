@@ -6,7 +6,7 @@
 
     <div class="q-pt-md q-gutter-sm q-pl-md " :class="[$q.screen.width < 1200 ? 'column' : 'row coursesDiv']">
       <div class="col"> 
-        <p class="getStartedText">getStartedImg</p>
+        <!-- <p class="getStartedText">getStartedImg</p> -->
         <img :class="[$q.screen.width < 1200 ? 'mobileImg q-pt-md' : 'desktopImg']" src="../../assets/getStartedMainPage/getStartedImg2.png" alt="">
       </div>
       <div class="col">
