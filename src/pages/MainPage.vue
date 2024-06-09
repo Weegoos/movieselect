@@ -39,6 +39,7 @@ export default {
 .quoteText{
   font-size: 16px;
   color: #C4C4C4;
+  width: 90%;
 }
 
 .introBtn{

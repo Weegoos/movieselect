@@ -10,7 +10,7 @@
     <q-header class="bg-black q-mt-sm q-pl-md header">
         <q-toolbar class="q-gutter-sm" color="white">
           <q-btn color="black" icon="menu">
-        <q-menu class="bg-black">
+        <q-menu class="bg-black" style="color: white">
           <q-list style="min-width: 100px;">
             <q-item  v-close-popup clickable>
               <q-btn to="/" class="text" dense no-caps flat >Домой</q-btn>
