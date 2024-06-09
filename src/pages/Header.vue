@@ -60,7 +60,7 @@
             <div class="text-h5" style="color: white">
               Movie Select
           <q-badge outline align="middle" color="teal">
-            v1.1.1
+            v1.1.2
         </q-badge>
     </div>
         </q-toolbar>
