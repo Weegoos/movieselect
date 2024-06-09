@@ -60,7 +60,7 @@
             <div class="text-h5" style="color: white">
               Movie Select
           <q-badge outline align="middle" color="teal">
-            v1.1.2
+            v1.1.3
         </q-badge>
     </div>
         </q-toolbar>
@@ -80,11 +80,13 @@ export default {
       },
       {
         id: 2,
-        type: 'По жанру'
+        type: 'По жанру',
+        link: '/films/genre',
       },
       {
         id: 3,
-        type: 'По названию'
+        type: 'По названию',
+        link: '/films/name',
       }
     ]
   }
