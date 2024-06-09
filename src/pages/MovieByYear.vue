@@ -1,9 +1,9 @@
 <template>
     <div class="container q-pa-md">
-      <p class="title" :class="[$q.screen.width < 800 ? 'mobileTitle' : 'desktopTitle']">Поиск фильмов по году</p>
-      <div class="search-container">
-        <q-input label="Поиск по году" :dense="dense" maxlength="4"  counter v-model="year" type="number"  @keyup.enter="searchMovies" class="search-input" />
-        <q-btn @click="searchMovies" class="search-button q-mt-lg" label="Поиск" style="max-height: 20px;"/>
+      <p class="title q-pt-xl" :class="[$q.screen.width < 800 ? 'mobileTitle' : 'desktopTitle']">Поиск фильмов по году</p>
+      <div class="search-container column">
+        <q-input  label="Поиск по году" :dense="dense" maxlength="4"  counter v-model="year" type="number"  @keyup.enter="searchMovies" class="search-input" /> <br>
+        <q-btn @click="searchMovies" class="search-button bg-white" label="Поиск" style="max-height: 20px;"/>
       </div>
       <div v-if="movies.length > 0">
         <h2 class="subtitle">Результаты:</h2>
@@ -106,9 +106,14 @@ formatDate(dateString) {
     margin: 0 auto;
   }
 
+  .search-button{
+    max-width: 150px;
+  }
 
   .title{
     font-weight: bold;
+    color: white;
+    font-size: 150px;
   }
 
   .mobileTitle{
@@ -129,11 +134,15 @@ formatDate(dateString) {
     font-size: 1em;
     padding: 0.5em;
     margin-right: 0.5em;
+    /* border: solid red 1px; */
+    border-radius: 7px;
+    background-color: white;
   }
   
   .subtitle {
     font-size: 1.5em;
     margin-bottom: 10px;
+    color: white;
   }
   
   .movies-container {

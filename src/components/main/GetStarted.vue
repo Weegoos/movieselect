@@ -1,7 +1,7 @@
 <template>
   <div class="getStarted">
     <p class="q-pt-md q-pl-sm" :class="[$q.screen.width < 1200 ? 'getStartedHeadlineMobile' : 'getStartedHeadlineDesktop']">Get Started.</p>
-    <p class="q-pl-sm" style="color:#C4C4C4" :class="[$q.screen.width < 1200 ? 'getStartedDescriptionMobile' : 'getStartedDescriptionDesktop' ]">Use these Solana Foundation and community courses to begin your journey into Solana development.</p>
+    <p class="q-pl-sm" style="color:#C4C4C4" :class="[$q.screen.width < 1200 ? 'getStartedDescriptionMobile' : 'getStartedDescriptionDesktop' ]">Use these Movie Select Foundation and community courses to begin your journey into Solana development.</p>
     <img class="getStartedImg1" :class="[$q.screen.width < 1200 ? 'getStartedImg1Mobile' : 'getStartedImg1Desktop']" src="../../assets/getStartedMainPage/getStartedImg1.png" alt="">
 
     <div class="q-pt-md q-gutter-sm q-pl-md " :class="[$q.screen.width < 1200 ? 'column' : 'row coursesDiv']">
