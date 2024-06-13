@@ -7,7 +7,7 @@
   class="fixed header rounded-borders"
 
   >
-    <q-header class="bg-black q-mt-sm q-pl-md header">
+    <q-header class="q-mt-sm q-pl-md header">
         <q-toolbar class="q-gutter-sm" color="white">
           <q-btn color="black" icon="menu">
         <q-menu class="bg-black" style="color: white">
@@ -96,7 +96,7 @@ export default {
 
 <style>
 .header{
-  background-color: black;
+  background-color: transparent;
   z-index: 1;
 }
 

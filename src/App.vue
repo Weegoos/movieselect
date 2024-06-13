@@ -14,10 +14,10 @@ import { onBeforeMount, onMounted } from 'vue';
 import headerPage from './pages/Header.vue';4
 
 onBeforeMount(() => {
-  console.clear()
+  // console.clear()
 })
 
 onMounted(() => {
-  console.clear()
+  // console.clear()
 })
 </script>

@@ -1,42 +1,111 @@
 <template>
-  <div>
-    <!-- <span class="msg">Жаным, я хочу пожелать тебе всего самого прекрасного в этом мире. Пусть каждый день твоей жизни будет наполнен радостью, улыбками и благополучием. Пусть ты всегда ощущаешь внутри себя силу и уверенность, чтобы преодолевать любые трудности на своем пути. Пусть твои мечты сбываются, а желания исполняются. Желаю тебе быть счастливой каждую минуту своей жизни, ощущать любовь и поддержку близких людей, идти к своим целям с уверенностью и решимостью. Пусть твоя жизнь будет наполнена светом и теплом, и пусть ты всегда остаешься такой же прекрасной и вдохновляющей, как сейчас. Я люблю тебя, и всегда буду рядом, чтобы поддерживать и вдохновлять тебя. Пусть этот день будет началом новых возможностей и приключений для тебя. Люблю тебя из глубины своего сердца! -->
+ <div>
+  <div class="mainMovieContainer" :class="[$q.screen.width < 700 ? 'moviesContainerMobile' : 'movies-container']">
+    <div v-for="movie in limitedMovies" :key="movie.id" :class="[$q.screen.width < 700 ? 'movieMobile' : 'movie']">
+      <img :src="getMovieImage(movie.poster_path)" :alt="movie.title" />
+    </div>
+  </div>
+  <img class=" absolute-center" :class="[$q.screen.width < 800 ? 'movieSelectIconMobile' : 'movieSelectIconDesktop']" src="../assets/movieSelectIcon.png" alt="">
+  <img class=" absolute-center" :class="[$q.screen.width < 800 ? 'movieSelectPlayMobile' : 'movieSelectIconDesktop']" src="../assets/play.png" alt="">
 
-
-    <!-- </span><br><br><br> -->
-    <!-- <span class="msg">Жаным, когда я смотрю на тебя, я вижу источник бесконечной силы и вдохновения. Ты такая удивительная и уникальная личность, способная свершать великие дела и вносить свет и радость в жизнь окружающих. С каждым днем ты становишься только сильнее, мудрее и красивее, и я горжусь тем, что могу быть частью твоего пути. Я хочу пожелать тебе всего самого лучшего в этом мире. Пусть каждый момент твоей жизни будет наполнен радостью, удовлетворением и благополучием. Пусть ты всегда ощущаешь внутри себя тепло и любовь, которые наполняют тебя силой и энергией для осуществления всех своих мечтаний и амбиций. Пусть ты находишь радость в мелочах, видишь красоту вокруг себя и ценность каждого дня. Пусть твои сердце всегда остается открытым для новых возможностей, а твоя душа стремится к росту и самосовершенствованию. Желаю тебе находить вдохновение в каждом новом дне, быть счастливой и довольной своей жизнью. Пусть ты преодолеваешь все препятствия на своем пути с легкостью и уверенностью, и пусть ничто не останавливает тебя в достижении своих целей. Люблю тебя из глубины своего сердца, и всегда буду рядом, чтобы поддерживать и вдохновлять тебя. Пусть этот день станет началом новых возможностей и приключений для тебя. Будь счастлива, моя дорогая! Люблю тебя до бесконечности!</span> -->
-    <!-- <span class="heart">&#10084;</span> -->
-    <div>
-      <MainPageIntro />
-    </div>
-    <div>
-      <GetStarted />
-    </div>
-    </div>
+ </div>
 </template>
 
-<script setup>
-import MainPageIntro from '../components/main/MainPageIntro.vue';
-import GetStarted from '../components/main/GetStarted.vue';
+
+<script>
+export default {
+  data() {
+    return {
+      apiKey: '455631d1f8cbe3eb25b45079f7a75431',
+      apiUrl: 'https://api.themoviedb.org/3/movie/popular',
+      movies: [],
+      maxMoviesDesktop: 15, 
+      maxMoviesMobile: 9, 
+    };
+  },
+  mounted() {
+    this.fetchPopularMovies();
+  },
+  methods: {
+    async fetchPopularMovies() {
+      try {
+        const response = await fetch(`${this.apiUrl}?api_key=${this.apiKey}`);
+        const data = await response.json();
+        this.movies = data.results;
+      } catch (error) {
+        console.error('Error fetching popular movies:', error);
+      }
+    },
+    getMovieImage(path) {
+      return `https://image.tmdb.org/t/p/w500${path}`;
+    },
+  },
+  computed: {
+    limitedMovies() {
+      return this.$q.screen.width < 700
+        ? this.movies.slice(0, this.maxMoviesMobile)
+        : this.movies.slice(0, this.maxMoviesDesktop);
+    },
+  },
+};
 </script>
 
-<style>
-.introImg{width: 70%;}
 
-.introtext{color: white}
 
-.introTextDesktop{font-size: 96px;}
-
-.introTextMobile{font-size: 46px;}
-
-.quoteText{
-  font-size: 16px;
-  color: #C4C4C4;
-  width: 90%;
+<style scoped>
+.mainMovieContainer{
+  display: grid;
+  gap: 10px;
+  padding: 20px;
+  opacity: 0.45;
 }
 
-.introBtn{
-  background-color: #14F195;
-  color: black;
+.movies-container {
+  grid-template-columns: repeat(5, 1fr); 
+  grid-template-rows: repeat(2, 1fr); 
 }
+
+.movie {
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-height: 350px; 
+}
+
+.movie img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* mobile */
+
+.moviesContainerMobile{
+  grid-template-columns: repeat(3, 0.5fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.movieMobile{
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* height: 200px;  */
+}
+
+.movieMobile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.movieSelectIconMobile{
+  width: 320px;
+}
+
+.movieSelectPlayMobile{
+  width: 80px;
+}
+
 </style>
+
+
