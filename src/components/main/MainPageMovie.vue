@@ -5,6 +5,11 @@
           <img :src="getMovieImage(movie.poster_path)" :alt="movie.title" />
         </div>
       </div>
+      <div>
+        <p class="text-white" align="center" :class="[$q.screen.width < 700 ? 'streamingIntroMobile' : 'streamingIntroDesktop']">The Best Streaming Experience</p>
+        <p class="text-grey" style="font-size: 20px" align="center">StreamVibe is the best streaming experience for watching your favorite movies and shows on demand, anytime, anywhere.</p>
+       <center> <q-btn color="negative" class="q-pa-sm" no-caps icon="tv" bordered label="Start Watching Now" @click="onClick" style="font-size: 18px;" /></center>
+      </div>
     </div>
   </template>
   
@@ -36,13 +41,14 @@
           const times = endTime - startTime
           const timer = setTimeout(() => {
             q.notify({
-              message: 'Страница загружена',
+              message: 'Фотографии загружены',
               icon: 'check',
               color: 'positive'
             })
           }, times);
         } catch (error) {
-          console.error('Error fetching popular movies:', error);
+          throw new Error('Error fetching popular movie')
+
         }
       };
   
@@ -121,6 +127,14 @@
   
   .movieSelectPlayMobile {
     width: 80px;
+  }
+
+  .streamingIntroMobile{
+    font-size: 42px;
+  }
+
+  .streamingIntroDesktop{
+    font-size: 72px;
   }
   </style>
   
