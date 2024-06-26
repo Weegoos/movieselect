@@ -4,27 +4,26 @@
       class="title q-pt-xl"
       :class="[$q.screen.width < 800 ? 'mobileTitle' : 'desktopTitle']"
     >
-      Поиск фильмов по году
+      Search Movies by Title
     </p>
     <div class="search-container column text-white">
       <q-input
         standout
         filled
-        label="Поиск по году"
+        label="Enter Movie Title"
         :dense="dense"
-        v-model="year"
-        type="number"
+        v-model="searchQuery"
         @keyup.enter="searchMovies"
         class="search-input"
       />
       <q-btn
         @click="searchMovies"
         class="search-button bg-primary text-white q-mt-md"
-        label="Поиск"
+        label="Search"
       />
     </div>
     <div v-if="movies.length > 0" class="results-container">
-      <h2 class="subtitle">Результаты:</h2>
+      <h2 class="subtitle">Results:</h2>
       <div class="movies-container">
         <div
           v-for="movie in movies"
@@ -33,12 +32,12 @@
         >
           <q-img
             :src="'https://image.tmdb.org/t/p/w500/' + movie.poster_path"
-            alt="Постер фильма"
+            alt="Movie Poster"
             v-if="movie.poster_path"
             class="movie-poster q-mb-sm"
           >
-            <template v-slot:loading> <q-spinner-gears /> </template
-          ></q-img>
+            <template v-slot:loading> <q-spinner-gears /> </template>
+          </q-img>
           <q-circular-progress
             :value="movie.vote_average.toFixed(1) * 10"
             size="50px"
@@ -48,10 +47,10 @@
             class="rating"
             show-value
           />
-          <h3 class="movie-title">{{ movie.title_ru || movie.title }}</h3>
+          <h3 class="movie-title">{{ movie.title_en || movie.title }}</h3>
           <div class="movie-details">
             <p class="movie-info">
-              <strong>Дата выпуска:</strong>
+              <strong>Release Date:</strong>
               {{ formatDate(movie.release_date) }}
             </p>
           </div>
@@ -64,57 +63,56 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import axios from "axios";
 import { ref } from "vue";
+import { useQuasar } from "quasar";
 
-export default {
-  data() {
-    return {
-      year: ref(""),
-      movies: [],
-      error: null,
-      dense: ref(false),
-    };
-  },
-  methods: {
-    async searchMovies() {
-      const apiKey = "455631d1f8cbe3eb25b45079f7a75431";
-      const searchUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&primary_release_year=${this.year}`;
+const $q = useQuasar();
+const searchQuery = ref("");
+const movies = ref([]);
+const error = ref(null);
+const dense = ref(false);
 
-      try {
-        const response = await axios.get(searchUrl);
+const apiKey = "455631d1f8cbe3eb25b45079f7a75431";
 
-        if (response.data.results.length > 0) {
-          this.movies = response.data.results.map((movie) => ({
-            ...movie,
-            title_ru: translateToRussian(movie.title),
-            overview_ru: translateToRussian(movie.overview),
-            trailer_link:
-              movie.id === 157336
-                ? "https://www.youtube.com/watch?v=zSWdZVtXT7E"
-                : null,
-          }));
-          this.error = null;
-        } else {
-          this.movies = [];
-          this.error = "Фильмы за указанный год не найдены";
-        }
-      } catch (error) {
-        console.error("Ошибка при получении фильмов:", error);
-        this.error = "Ошибка при получении фильмов";
-      }
+const searchMovies = async () => {
+  if (!searchQuery.value.trim()) {
+    error.value = "Please enter a movie title";
+    return;
+  }
 
-      function translateToRussian(text) {
-        return text;
-      }
-    },
-    formatDate(dateString) {
-      const options = { month: "long", day: "numeric", year: "numeric" };
-      const date = new Date(dateString);
-      return date.toLocaleDateString("ru-RU", options);
-    },
-  },
+  const encodedQuery = encodeURIComponent(searchQuery.value.trim());
+  const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodedQuery}`;
+  console.log("API Request URL:", searchUrl); // Log the URL being requested
+  try {
+    const response = await axios.get(searchUrl);
+    console.log("API Response:", response.data); // Debugging line
+    if (response.data.results.length > 0) {
+      movies.value = response.data.results.map((movie) => ({
+        ...movie,
+        title_en: movie.title,
+        overview_en: movie.overview,
+        trailer_link:
+          movie.id === 157336
+            ? "https://www.youtube.com/watch?v=zSWdZVtXT7E"
+            : null,
+      }));
+      error.value = null;
+    } else {
+      movies.value = [];
+      error.value = "No movies found for the entered title";
+    }
+  } catch (err) {
+    console.error("Error fetching movies:", err);
+    error.value = "Error fetching movies";
+  }
+};
+
+const formatDate = (dateString) => {
+  const options = { month: "long", day: "numeric", year: "numeric" };
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", options);
 };
 </script>
 

@@ -2,6 +2,7 @@
   <div>
     <MainPageMovie />
     <GenreMainPage />
+    <Devices />
   </div>
 </template>
 
@@ -9,6 +10,8 @@
 import { onErrorCaptured } from "vue";
 import MainPageMovie from "../components/main/MainPageMovie.vue";
 import GenreMainPage from "../components/main/GenreMainPage.vue";
+import Devices from "../components/main/Devices.vue";
+
 import { useQuasar } from "quasar";
 
 const q = useQuasar();
