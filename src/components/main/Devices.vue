@@ -1,10 +1,17 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
-    <p class="text-white">
+    <p
+      class="text-white q-pl-md"
+      :class="[
+        $q.screen.width < 800
+          ? 'devicesHeadlineMobile'
+          : 'devicesHeadlineDesktop',
+      ]"
+    >
       We Provide you streaming experience across various devices.
     </p>
-    <p class="text-grey">
+    <p class="text-grey q-pl-md">
       With StreamVibe, you can enjoy your favorite movies and TV shows anytime,
       anywhere. Our platform is designed to be compatible with a wide range of
       devices, ensuring that you never miss a moment of entertainment.
@@ -129,5 +136,15 @@ const devicesBottom = [
 
 .deviceDescription {
   width: 90%;
+}
+
+/* desktop */
+.devicesHeadlineDesktop {
+  font-size: 42px;
+}
+
+/* mobile */
+.devicesHeadlineMobile {
+  font-size: 36px;
 }
 </style>

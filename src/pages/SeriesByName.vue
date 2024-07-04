@@ -4,55 +4,54 @@
       class="title q-pt-xl"
       :class="[$q.screen.width < 800 ? 'mobileTitle' : 'desktopTitle']"
     >
-      Search Movies by Genre
+      Search TV Shows by Title
     </p>
     <div class="search-container column text-white">
-      <q-select
+      <q-input
         standout
         filled
-        label="Select Genre"
+        label="Enter TV Show Title"
         :dense="dense"
-        v-model="selectedGenre"
-        :options="genres"
-        @keyup.enter="searchMovies"
+        v-model="searchQuery"
+        @keyup.enter="searchTVShows"
         class="search-input"
       />
       <q-btn
-        @click="searchMovies"
+        @click="searchTVShows"
         class="search-button bg-primary text-white q-mt-md"
         label="Search"
       />
     </div>
-    <div v-if="movies.length > 0" class="results-container">
+    <div v-if="tvShows.length > 0" class="results-container">
       <h2 class="subtitle">Results:</h2>
-      <div class="movies-container">
+      <div class="tv-shows-container">
         <div
-          v-for="movie in movies"
-          :key="movie.id"
-          class="movie-card q-pa-md q-mb-md"
+          v-for="show in tvShows"
+          :key="show.id"
+          class="show-card q-pa-md q-mb-md"
         >
           <q-img
-            :src="'https://image.tmdb.org/t/p/w500/' + movie.poster_path"
-            alt="Movie Poster"
-            v-if="movie.poster_path"
-            class="movie-poster q-mb-sm"
+            :src="'https://image.tmdb.org/t/p/w500/' + show.poster_path"
+            alt="TV Show Poster"
+            v-if="show.poster_path"
+            class="show-poster q-mb-sm"
           >
             <template v-slot:loading> <q-spinner-gears /> </template>
           </q-img>
           <q-circular-progress
-            :value="movie.vote_average.toFixed(1) * 10"
+            :value="show.vote_average.toFixed(1) * 10"
             size="50px"
             :color="
-              movie.vote_average.toFixed(1) * 10 >= 70 ? 'green' : 'yellow'
+              show.vote_average.toFixed(1) * 10 >= 70 ? 'green' : 'yellow'
             "
             class="rating"
             show-value
           />
-          <h3 class="movie-title">{{ movie.title_en || movie.title }}</h3>
-          <div class="movie-details">
-            <p class="movie-info">
-              <strong>Release Date:</strong>
-              {{ formatDate(movie.release_date) }}
+          <h3 class="show-title">{{ show.name_en || show.name }}</h3>
+          <div class="show-details">
+            <p class="show-info">
+              <strong>First Air Date:</strong>
+              {{ formatDate(show.first_air_date) }}
             </p>
           </div>
         </div>
@@ -66,61 +65,47 @@
 
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useQuasar } from "quasar";
 
 const $q = useQuasar();
-const selectedGenre = ref(null);
-const genres = ref([]);
-const movies = ref([]);
+const searchQuery = ref("");
+const tvShows = ref([]);
 const error = ref(null);
 const dense = ref(false);
 
 const apiKey = "455631d1f8cbe3eb25b45079f7a75431";
-const getGenres = async () => {
-  const genreUrl = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`;
-  try {
-    const response = await axios.get(genreUrl);
-    console.log("Fetched Genres:", response.data.genres);
-    genres.value = response.data.genres.map((genre) => ({
-      label: genre.name,
-      value: genre.id,
-    }));
-  } catch (err) {
-    console.error("Error fetching genres:", err);
-  }
-};
 
-const searchMovies = async () => {
-  if (!selectedGenre.value) {
-    error.value = "Please select a genre";
+const searchTVShows = async () => {
+  if (!searchQuery.value.trim()) {
+    error.value = "Please enter a TV show title";
     return;
   }
 
-  const genreId = selectedGenre.value.value; // Extract the genre ID
-  const searchUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=${genreId}`;
+  const encodedQuery = encodeURIComponent(searchQuery.value.trim());
+  const searchUrl = `https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&query=${encodedQuery}`;
   console.log("API Request URL:", searchUrl);
   try {
     const response = await axios.get(searchUrl);
     console.log("API Response:", response.data);
     if (response.data.results.length > 0) {
-      movies.value = response.data.results.map((movie) => ({
-        ...movie,
-        title_en: movie.title,
-        overview_en: movie.overview,
+      tvShows.value = response.data.results.map((show) => ({
+        ...show,
+        name_en: show.name,
+        overview_en: show.overview,
         trailer_link:
-          movie.id === 157336
+          show.id === 1399
             ? "https://www.youtube.com/watch?v=zSWdZVtXT7E"
             : null,
       }));
       error.value = null;
     } else {
-      movies.value = [];
-      error.value = "No movies found for the selected genre";
+      tvShows.value = [];
+      error.value = "No TV shows found for the entered title";
     }
   } catch (err) {
-    console.error("Error fetching movies:", err);
-    error.value = "Error fetching movies";
+    console.error("Error fetching TV shows:", err);
+    error.value = "Error fetching TV shows";
   }
 };
 
@@ -129,10 +114,6 @@ const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", options);
 };
-
-onMounted(() => {
-  getGenres();
-});
 </script>
 
 <style scoped>
@@ -185,13 +166,13 @@ onMounted(() => {
   text-align: center;
 }
 
-.movies-container {
+.tv-shows-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 20px;
 }
 
-.movie-card {
+.show-card {
   background-color: white;
   padding: 15px;
   border-radius: 8px;
@@ -199,20 +180,20 @@ onMounted(() => {
   text-align: center;
 }
 
-.movie-title {
+.show-title {
   font-size: 1.2em;
   margin-bottom: 10px;
 }
 
-.movie-details {
+.show-details {
   margin-bottom: 15px;
 }
 
-.movie-info {
+.show-info {
   margin-bottom: 5px;
 }
 
-.movie-poster {
+.show-poster {
   max-width: 100%;
   height: auto;
   border-radius: 10px;

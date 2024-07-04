@@ -84,10 +84,10 @@ const searchMovies = async () => {
 
   const encodedQuery = encodeURIComponent(searchQuery.value.trim());
   const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodedQuery}`;
-  console.log("API Request URL:", searchUrl); // Log the URL being requested
+  console.log("API Request URL:", searchUrl);
   try {
     const response = await axios.get(searchUrl);
-    console.log("API Response:", response.data); // Debugging line
+    console.log("API Response:", response.data);
     if (response.data.results.length > 0) {
       movies.value = response.data.results.map((movie) => ({
         ...movie,

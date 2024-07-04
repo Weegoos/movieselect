@@ -4,7 +4,7 @@
       class="title q-pt-xl"
       :class="[$q.screen.width < 800 ? 'mobileTitle' : 'desktopTitle']"
     >
-      Search Movies by Year
+      Search TV Shows by Year
     </p>
     <div class="search-container column text-white">
       <q-input
@@ -14,45 +14,45 @@
         :dense="dense"
         v-model="year"
         type="number"
-        @keyup.enter="searchMovies"
+        @keyup.enter="searchTVShows"
         class="search-input"
       />
       <q-btn
-        @click="searchMovies"
+        @click="searchTVShows"
         class="search-button bg-primary text-white q-mt-md"
         label="Search"
       />
     </div>
-    <div v-if="movies.length > 0" class="results-container">
+    <div v-if="tvShows.length > 0" class="results-container">
       <h2 class="subtitle">Results:</h2>
-      <div class="movies-container">
+      <div class="tvShows-container">
         <div
-          v-for="movie in movies"
-          :key="movie.id"
-          class="movie-card q-pa-md q-mb-md"
+          v-for="tvShow in tvShows"
+          :key="tvShow.id"
+          class="tvShow-card q-pa-md q-mb-md"
         >
           <q-img
-            :src="'https://image.tmdb.org/t/p/w500/' + movie.poster_path"
-            alt="Movie Poster"
-            v-if="movie.poster_path"
-            class="movie-poster q-mb-sm"
+            :src="'https://image.tmdb.org/t/p/w500/' + tvShow.poster_path"
+            alt="TV Show Poster"
+            v-if="tvShow.poster_path"
+            class="tvShow-poster q-mb-sm"
           >
-            <template v-slot:loading> <q-spinner-gears /> </template
-          ></q-img>
+            <template v-slot:loading> <q-spinner-gears /> </template>
+          </q-img>
           <q-circular-progress
-            :value="movie.vote_average.toFixed(1) * 10"
+            :value="tvShow.vote_average.toFixed(1) * 10"
             size="50px"
             :color="
-              movie.vote_average.toFixed(1) * 10 >= 70 ? 'green' : 'yellow'
+              tvShow.vote_average.toFixed(1) * 10 >= 70 ? 'green' : 'yellow'
             "
             class="rating"
             show-value
           />
-          <h3 class="movie-title">{{ movie.title }}</h3>
-          <div class="movie-details">
-            <p class="movie-info">
-              <strong>Release Date:</strong>
-              {{ formatDate(movie.release_date) }}
+          <h3 class="tvShow-title">{{ tvShow.name }}</h3>
+          <div class="tvShow-details">
+            <p class="tvShow-info">
+              <strong>First Air Date:</strong>
+              {{ formatDate(tvShow.first_air_date) }}
             </p>
           </div>
         </div>
@@ -72,29 +72,29 @@ export default {
   data() {
     return {
       year: ref(""),
-      movies: [],
+      tvShows: [],
       error: null,
       dense: ref(false),
     };
   },
   methods: {
-    async searchMovies() {
+    async searchTVShows() {
       const apiKey = "455631d1f8cbe3eb25b45079f7a75431";
-      const searchUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&primary_release_year=${this.year}`;
+      const searchUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&first_air_date_year=${this.year}`;
 
       try {
         const response = await axios.get(searchUrl);
 
         if (response.data.results.length > 0) {
-          this.movies = response.data.results;
+          this.tvShows = response.data.results;
           this.error = null;
         } else {
-          this.movies = [];
-          this.error = "No movies found for the specified year";
+          this.tvShows = [];
+          this.error = "No TV shows found for the specified year";
         }
       } catch (error) {
-        console.error("Error fetching movies:", error);
-        this.error = "Error fetching movies";
+        console.error("Error fetching TV shows:", error);
+        this.error = "Error fetching TV shows";
       }
     },
     formatDate(dateString) {
@@ -156,13 +156,13 @@ export default {
   text-align: center;
 }
 
-.movies-container {
+.tvShows-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 20px;
 }
 
-.movie-card {
+.tvShow-card {
   background-color: white;
   padding: 15px;
   border-radius: 8px;
@@ -170,20 +170,20 @@ export default {
   text-align: center;
 }
 
-.movie-title {
+.tvShow-title {
   font-size: 1.2em;
   margin-bottom: 10px;
 }
 
-.movie-details {
+.tvShow-details {
   margin-bottom: 15px;
 }
 
-.movie-info {
+.tvShow-info {
   margin-bottom: 5px;
 }
 
-.movie-poster {
+.tvShow-poster {
   max-width: 100%;
   height: auto;
   border-radius: 10px;

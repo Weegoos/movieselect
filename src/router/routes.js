@@ -4,6 +4,10 @@ const routes = [
     component: () => import("../pages/MainPage.vue"),
   },
   {
+    path: "/about",
+    component: () => import("../pages/About.vue"),
+  },
+  {
     path: "/films",
     children: [
       {
@@ -17,6 +21,23 @@ const routes = [
       {
         path: "name",
         component: () => import("../pages/MovieByName.vue"),
+      },
+    ],
+  },
+  {
+    path: "/serial",
+    children: [
+      {
+        path: "year",
+        component: () => import("../pages/SeriesByYear.vue"),
+      },
+      {
+        path: "genre",
+        component: () => import("../pages/SeriesByGenre.vue"),
+      },
+      {
+        path: "name",
+        component: () => import("../pages/SeriesByName.vue"),
       },
     ],
   },
