@@ -1,7 +1,7 @@
 <template>
   <div class="cytoscape-container column">
-    <div ref="cyContainer" class="cytoscape-graph"></div>
-    <div class="q-pa-lg q-py-md text-white">
+    <!-- <div ref="cyContainer" class="cytoscape-graph"></div> -->
+    <div class="q-pa-xl q-py-md text-white">
       <q-timeline color="secondary">
         <transition appear @before-enter="beforeEnterText" @enter="enterText">
           <q-timeline-entry heading body="About us" />
