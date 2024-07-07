@@ -13,6 +13,7 @@ const routes = [
       {
         path: "year",
         component: () => import("../pages/MovieByYear.vue"),
+        name: "Year",
       },
       {
         path: "genre",

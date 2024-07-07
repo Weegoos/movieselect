@@ -42,9 +42,14 @@
             </div>
             <center>
               <div style="vertical-align: top">
-                <q-btn no-caps dense flat class="text-white genreText">{{
-                  genre.name
-                }}</q-btn>
+                <q-btn
+                  no-caps
+                  dense
+                  flat
+                  class="text-white genreText"
+                  @click="navigate(genre.link)"
+                  >{{ genre.name }}</q-btn
+                >
               </div>
             </center>
           </div>
@@ -99,19 +104,20 @@ import {
   QToggle,
   QBtn,
 } from "quasar";
+import { useRouter } from "vue-router";
 
 const slide = ref(1);
 const autoplay = ref(false);
 
 const genreArray = ref([
-  { id: 28, name: "Action", photos: [] },
-  { id: 27, name: "Horror", photos: [] },
-  { id: 35, name: "Comedy", photos: [] },
-  { id: 12, name: "Adventure", photos: [] },
-  { id: 18, name: "Drama", photos: [] },
-  { id: 14, name: "Fantasy", photos: [] },
-  { id: 16, name: "Animation", photos: [] },
-  { id: 99, name: "Documentary", photos: [] },
+  { id: 28, name: "Action", photos: [], link: "/films/genre" },
+  { id: 27, name: "Horror", photos: [], link: "/films/genre" },
+  { id: 35, name: "Comedy", photos: [], link: "/films/genre" },
+  { id: 12, name: "Adventure", photos: [], link: "/films/genre" },
+  { id: 18, name: "Drama", photos: [], link: "/films/genre" },
+  { id: 14, name: "Fantasy", photos: [], link: "/films/genre" },
+  { id: 16, name: "Animation", photos: [], link: "/films/genre" },
+  { id: 99, name: "Documentary", photos: [], link: "/films/genre" },
 ]);
 
 const apiKey = "455631d1f8cbe3eb25b45079f7a75431";
@@ -150,6 +156,12 @@ onMounted(async () => {
   }
   genreChunks.value = chunkArray(genreArray.value, 4);
 });
+
+const router = useRouter();
+
+const navigate = (route) => {
+  router.push(route);
+};
 </script>
 
 <style>
